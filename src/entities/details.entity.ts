@@ -26,8 +26,11 @@ export class Details {
   @Column()
   storage: string;
 
-  @Column()
+  @Column({ nullable: true })
   graphics: string;
+
+  @Column({ nullable: true })
+  psu: string;
 
   @Column({ nullable: true })
   casing: string;
@@ -41,6 +44,5 @@ export class Details {
   @OneToOne(() => Products, (product) => product.details, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
   product: Products;
 }

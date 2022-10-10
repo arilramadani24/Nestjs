@@ -1,4 +1,3 @@
-import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty } from 'class-validator';
 
 export class CreateProductDto {
@@ -10,7 +9,6 @@ export class CreateProductDto {
 
   @IsNotEmpty()
   @IsInt()
-  @Type(() => BigInt)
   price: number;
 
   image: string;

@@ -22,7 +22,7 @@ export class Products {
   @Column()
   stock: number;
 
-  @Column({ type: 'bigint' })
+  @Column()
   price: number;
 
   @Column({ nullable: true })

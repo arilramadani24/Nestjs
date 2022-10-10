@@ -1,12 +1,14 @@
 import { Category } from './../entities/category.entity';
-import { CreateProductDetailsDto } from './dto/create-product-details.dto';
 import { Details } from './../entities/details.entity';
 import { Products } from './../entities/product.entity';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
 import { Repository } from 'typeorm';
+import {
+  CreateProductDetailsDto,
+  CreateProductDto,
+  UpdateProductDto,
+} from './dto';
 
 @Injectable()
 export class ProductService {
@@ -28,14 +30,14 @@ export class ProductService {
   findAll() {
     return this.productRepository.find({
       order: { id: 'ASC' },
-      relations: ['category', 'details'],
+      relations: ['details'],
     });
   }
 
   async findOne(id: string) {
     const product = await this.productRepository.findOne({
       where: { id },
-      relations: ['category', 'details'],
+      relations: ['details'],
     });
 
     if (!product)

@@ -16,5 +16,8 @@ export class CreateProductDetailsDto {
   graphics: string;
 
   @IsOptional()
+  psu: string;
+
+  @IsOptional()
   casing: string;
 }

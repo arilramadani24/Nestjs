@@ -1,5 +1,4 @@
 import { CategoryService } from './../category/category.service';
-import { CreateProductDetailsDto } from './dto/create-product-details.dto';
 import {
   Controller,
   Get,
@@ -10,8 +9,11 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import {
+  CreateProductDetailsDto,
+  CreateProductDto,
+  UpdateProductDto,
+} from './dto';
 
 @Controller('product')
 export class ProductController {

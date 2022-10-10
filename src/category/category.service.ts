@@ -20,8 +20,8 @@ export class CategoryService {
 
   findAll() {
     return this.categoryRepository.find({
-      order: { id: 'ASC' },
       relations: ['products', 'products.details'],
+      order: { id: 'ASC' },
     });
   }
 
