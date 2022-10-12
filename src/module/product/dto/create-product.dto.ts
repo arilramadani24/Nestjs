@@ -14,5 +14,5 @@ export class CreateProductDto {
   image: string;
 
   @IsNotEmpty()
-  categoryId: string;
+  category_id: string;
 }

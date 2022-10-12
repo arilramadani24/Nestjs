@@ -1,4 +1,4 @@
-import { Category } from '../entities/category.entity';
+import { Category } from './entity/category.entity';
 import { Global, Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -21,7 +21,7 @@ export class CategoryService {
   findAll() {
     return this.categoryRepository.find({
       relations: ['products', 'products.details'],
-      order: { id: 'ASC' },
+      order: { id: 'ASC', products: { id: 'ASC' } },
     });
   }
 
@@ -29,6 +29,7 @@ export class CategoryService {
     const category = await this.categoryRepository.findOne({
       where: { id },
       relations: ['products', 'products.details'],
+      order: { id: 'ASC' },
     });
 
     if (!category)

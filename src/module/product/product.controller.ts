@@ -25,7 +25,7 @@ export class ProductController {
   @Post()
   async createProduct(@Body() createProductDto: CreateProductDto) {
     const category = await this.categoryService.findOne(
-      createProductDto.categoryId,
+      createProductDto.category_id,
     );
 
     return await this.productService.create(createProductDto, category);

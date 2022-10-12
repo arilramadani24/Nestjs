@@ -1,27 +1,33 @@
-import { Products } from './product.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  Generated,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'category' })
-export class Category {
+@Entity({ name: 'users' })
+export class User {
   @PrimaryColumn()
+  @Generated('uuid')
   id: string;
 
   @Column()
-  category_name: string;
+  username: string;
+
+  @Column({ unique: true })
+  email: string;
+
+  @Column()
+  password: string;
+
+  @Column({ unique: true })
+  phone_number: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
   created_at: Date;
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updated_at: Date;
-
-  @OneToMany(() => Products, (products) => products.category)
-  products: Products[];
 }

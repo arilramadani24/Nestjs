@@ -1,4 +1,3 @@
-import { Category } from './category.entity';
 import { Details } from './details.entity';
 import {
   Column,
@@ -10,6 +9,7 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Category } from 'src/module/category/entity/category.entity';
 
 @Entity({ name: 'products' })
 export class Products {

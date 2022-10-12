@@ -1,6 +1,5 @@
-import { Category } from './../entities/category.entity';
-import { Details } from './../entities/details.entity';
-import { Products } from './../entities/product.entity';
+import { Category } from '../category/entity/category.entity';
+import { Details } from './entity/details.entity';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -9,6 +8,7 @@ import {
   CreateProductDto,
   UpdateProductDto,
 } from './dto';
+import { Products } from './entity/product.entity';
 
 @Injectable()
 export class ProductService {
