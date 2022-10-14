@@ -32,6 +32,9 @@ export class Details {
   psu: string;
 
   @Column({ nullable: true })
+  display: string;
+
+  @Column({ nullable: true })
   casing: string;
 
   @CreateDateColumn({ type: 'timestamptz' })

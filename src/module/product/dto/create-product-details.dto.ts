@@ -16,6 +16,9 @@ export class CreateProductDetailsDto {
   graphics: string;
 
   @IsOptional()
+  display: string;
+
+  @IsOptional()
   psu: string;
 
   @IsOptional()

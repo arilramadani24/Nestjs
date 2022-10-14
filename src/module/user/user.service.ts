@@ -10,14 +10,21 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
-    const user = this.userRepository.create(createUserDto);
+  async findOne(username: string) {
+    const user = await this.userRepository.findOneBy({ username });
 
-    return await this.userRepository.save(user);
+    try {
+      return user;
+    } catch (err) {
+      throw new HttpException(
+        `User with username ${username} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   async findByEmail(email: string) {
-    const user = await this.userRepository.findOne({ where: { email } });
+    const user = await this.userRepository.findOneBy({ email });
 
     try {
       return user;
@@ -26,16 +33,25 @@ export class UserService {
     }
   }
 
-  async findById(id: string) {
-    const user = await this.userRepository.findBy({ id });
+  async create(dto: CreateUserDto) {
+    const { username, email, password, phone_number } = dto;
 
-    try {
-      return user;
-    } catch (err) {
+    // check if the user exists in the db
+    const userInDb = await this.findByEmail(email);
+
+    if (userInDb)
       throw new HttpException(
-        `User with id ${id} not found`,
-        HttpStatus.NOT_FOUND,
+        `User with email ${email} is already exists !`,
+        HttpStatus.BAD_REQUEST,
       );
-    }
+
+    const user = this.userRepository.create({
+      username,
+      email,
+      password,
+      phone_number,
+    });
+
+    return await this.userRepository.save(user);
   }
 }
