@@ -1,35 +1,28 @@
-import { JwtAuthGuard } from './jwt-auth.guard';
-import { AuthenticatedGuard } from './authenticated.guard';
-import { LocalAuthguard } from './local-auth.guard';
+import { CreateUserDto } from './../user/dto/create-user.dto';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
-import { CreateUserDto } from '../user/dto';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  register(@Body() dto: CreateUserDto) {
-    return this.authService.register(dto);
+  register(@Body() body: CreateUserDto) {
+    return this.authService.register(body);
   }
 
-  @UseGuards(LocalAuthguard)
   @Post('login')
-  login(@Request() req) {
-    return this.authService.login(req.user);
-  }
+  login(
+    @Body('email') email: string,
+    @Body('password') password: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const jwt = this.authService.login(email, password);
+    res.cookie('jwt', jwt, { httpOnly: true });
 
-  @UseGuards(JwtAuthGuard)
-  @Get('in')
-  hello(@Request() req): string {
-    return req.user;
+    return {
+      message: 'success',
+    };
   }
 }

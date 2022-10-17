@@ -1,6 +1,11 @@
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entity/user.entity';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -10,47 +15,18 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  async findOne(username: string) {
-    const user = await this.userRepository.findOneBy({ username });
+  async findOne(condition: any) {
+    const user = await this.userRepository.findOne(condition);
 
     try {
       return user;
     } catch (err) {
-      throw new HttpException(
-        `User with username ${username} not found`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
-  }
-
-  async findByEmail(email: string) {
-    const user = await this.userRepository.findOneBy({ email });
-
-    try {
-      return user;
-    } catch (err) {
-      throw new HttpException(`Email ${email} not found`, HttpStatus.NOT_FOUND);
+      throw new BadRequestException('Invalid Credentials');
     }
   }
 
   async create(dto: CreateUserDto) {
-    const { username, email, password, phone_number } = dto;
-
-    // check if the user exists in the db
-    const userInDb = await this.findByEmail(email);
-
-    if (userInDb)
-      throw new HttpException(
-        `User with email ${email} is already exists !`,
-        HttpStatus.BAD_REQUEST,
-      );
-
-    const user = this.userRepository.create({
-      username,
-      email,
-      password,
-      phone_number,
-    });
+    const user = this.userRepository.create(dto);
 
     return await this.userRepository.save(user);
   }
