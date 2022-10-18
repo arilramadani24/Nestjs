@@ -1,11 +1,6 @@
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entity/user.entity';
-import {
-  BadRequestException,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -15,13 +10,27 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  async findOne(condition: any) {
-    const user = await this.userRepository.findOne(condition);
+  async findAll() {
+    return await this.userRepository.find();
+  }
+
+  async findById(id: string) {
+    const user = await this.userRepository.findOneBy({ id });
 
     try {
       return user;
     } catch (err) {
-      throw new BadRequestException('Invalid Credentials');
+      throw new BadRequestException(`User with id: ${id} not found`);
+    }
+  }
+
+  async findByEmail(email: string) {
+    const user = await this.userRepository.findOneBy({ email });
+
+    try {
+      return user;
+    } catch (err) {
+      throw new BadRequestException(`User with email: ${email} not found`);
     }
   }
 

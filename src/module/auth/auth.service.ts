@@ -21,7 +21,7 @@ export class AuthService {
     const { email } = body;
 
     // check if the user exists in the db
-    const userInDb = await this.userService.findOne(email);
+    const userInDb = await this.userService.findByEmail(email);
 
     if (userInDb)
       throw new HttpException(
@@ -30,12 +30,13 @@ export class AuthService {
       );
 
     const user = await this.userService.create(body);
+
     return user;
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<string> {
     // Check User in database
-    const user = await this.userService.findOne(email);
+    const user = await this.userService.findByEmail(email);
 
     if (!user) throw new BadRequestException('Invalid Credentials');
 
