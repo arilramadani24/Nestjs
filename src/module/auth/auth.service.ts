@@ -1,7 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from './../user/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from './../user/user.service';
 import {
   BadRequestException,
   ForbiddenException,
@@ -10,14 +9,6 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UserService } from './../user/user.service';
-import {
-  Injectable,
-  BadRequestException,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
-import { User } from '../user/entity/user.entity';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
