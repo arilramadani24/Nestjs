@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './../user/dto/create-user.dto';
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   HttpCode,
   Post,
@@ -11,20 +12,46 @@ import {
   UnauthorizedException,
   Req,
   Get,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response, Request } from 'express';
 @Controller('auth')
 export class AuthController {
   constructor(
-    private authService: AuthService,
-    private jwtService: JwtService,
-    private user: UserService,
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('users')
+  getAllUser() {
+    return this.userService.findAll();
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('user')
+  async authUser(@Req() req: Request) {
+    try {
+      const cookie = req.cookies['jwt'];
+
+      const data = await this.jwtService.verifyAsync(cookie);
+
+      if (!data) throw new UnauthorizedException();
+
+      const user = await this.userService.findById(data['id']);
+
+      return user;
+    } catch (e) {
+      throw new UnauthorizedException();
+    }
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('register')
-  async register(@Body() dto: CreateUserDto) {
-    return await this.authService.register(dto);
+  register(@Body() body: CreateUserDto) {
+    return this.authService.register(body);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -53,7 +80,7 @@ export class AuthController {
         throw new UnauthorizedException();
       }
 
-      const user = await this.user.findById(data['id']);
+      const user = await this.userService.findById(data['id']);
 
       const { password, ...result } = user;
 

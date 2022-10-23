@@ -1,23 +1,24 @@
-import { JwtStrategy } from './strategy/jwt.strategy';
+import { JwtModule } from '@nestjs/jwt';
+import { UserModule } from './../user/user.module';
+import { ConfigModule } from '@nestjs/config';
 import { User } from './../user/entity/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtConfig } from 'src/config/jwt.config';
-import { JwtModule } from '@nestjs/jwt';
-import { UserModule } from './../user/user.module';
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { ConfigModule } from '@nestjs/config';
+import { JwtStrategy } from './strategy/jwt.strategy';
 
 @Module({
   imports: [
     ConfigModule,
-    UserModule,
+    ConfigModule,
     TypeOrmModule.forFeature([User]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useClass: JwtConfig,
     }),
+    UserModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
