@@ -4,6 +4,7 @@ import { CreateUserDto } from './../user/dto/create-user.dto';
 import {
   Body,
   ClassSerializerInterceptor,
+  ClassSerializerInterceptor,
   Controller,
   HttpCode,
   Post,
@@ -48,6 +49,7 @@ export class AuthController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('register')
   register(@Body() body: CreateUserDto) {

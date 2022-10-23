@@ -1,11 +1,6 @@
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entity/user.entity';
-import {
-  BadRequestException,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -37,10 +32,7 @@ export class UserService {
     try {
       return user;
     } catch (err) {
-      throw new HttpException(
-        `User with id ${id} not found`,
-        HttpStatus.NOT_FOUND,
-      );
+      throw new BadRequestException(`User with id: ${id} not found`);
     }
   }
 
