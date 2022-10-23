@@ -4,9 +4,9 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtConfig implements JwtOptionsFactory {
-  constructor(private configService: ConfigService) {}
+  constructor(private config: ConfigService) {}
 
   createJwtOptions() {
-    return this.configService.get('jwt');
+    return this.config.get('jwt');
   }
 }

@@ -1,38 +1,62 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from '../user/dto';
-import { UserService } from '../user/user.service';
-import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
+import { CreateUserDto } from './../user/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { UserService } from './../user/user.service';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private config: ConfigService,
   ) {}
 
-  async validateUser(username: string, password: string) {
-    const user = await this.userService.findOne(username);
+  async register(dto: CreateUserDto) {
+    // Get User's email
+    const { email } = dto;
 
-    const passwordValid = await bcrypt.compare(password, user.password);
+    // check if the user exists in the db
+    const userInDb = await this.userService.findByEmail(email);
 
-    if (user && passwordValid) {
-      const { password, ...userDetails } = user;
-      return userDetails;
+    if (userInDb) throw new BadRequestException('User has already exists!');
+
+    // Creating User
+    const user = await this.userService.create(dto);
+
+    return user;
+  }
+
+  async login(email: string, password: string) {
+    // Check user in database
+    const user = await this.userService.findByEmail(email);
+    if (!user) throw new NotFoundException('User not found!');
+
+    if (!(await bcrypt.compare(password, user.password))) {
+      throw new ForbiddenException('Password wrong');
     }
 
-    return null;
-  }
+    const { id, username } = user;
 
-  async login(user) {
-    const payload = { name: user.username, sub: user.id };
-
-    return {
-      access_token: this.jwtService.sign(payload),
+    const payload = {
+      sub: id,
+      username,
+      email,
     };
-  }
 
-  register(dto: CreateUserDto) {
-    return this.userService.create(dto);
+    const secret = this.config.get('JWT_SECRET');
+
+    const token = await this.jwtService.signAsync(payload, {
+      expiresIn: '365d',
+      secret,
+    });
+
+    return token;
   }
 }

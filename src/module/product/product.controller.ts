@@ -18,7 +18,7 @@ import {
 @Controller('product')
 export class ProductController {
   constructor(
-    private readonly productService: ProductService,
+    private productService: ProductService,
     private categoryService: CategoryService,
   ) {}
 

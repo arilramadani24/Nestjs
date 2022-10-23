@@ -2,6 +2,9 @@ import { IsInt, IsNotEmpty } from 'class-validator';
 
 export class CreateProductDto {
   @IsNotEmpty()
+  id: string;
+
+  @IsNotEmpty()
   product_name: string;
 
   @IsNotEmpty()

@@ -10,7 +10,11 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  async findOne(username: string) {
+  findAll() {
+    return this.userRepository.find();
+  }
+
+  async findByName(username: string) {
     const user = await this.userRepository.findOneBy({ username });
 
     try {
@@ -18,6 +22,19 @@ export class UserService {
     } catch (err) {
       throw new HttpException(
         `User with username ${username} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
+  async findById(id: string) {
+    const user = await this.userRepository.findOneBy({ id });
+
+    try {
+      return user;
+    } catch (err) {
+      throw new HttpException(
+        `User with username ${id} not found`,
         HttpStatus.NOT_FOUND,
       );
     }
@@ -34,23 +51,7 @@ export class UserService {
   }
 
   async create(dto: CreateUserDto) {
-    const { username, email, password, phone_number } = dto;
-
-    // check if the user exists in the db
-    const userInDb = await this.findByEmail(email);
-
-    if (userInDb)
-      throw new HttpException(
-        `User with email ${email} is already exists !`,
-        HttpStatus.BAD_REQUEST,
-      );
-
-    const user = this.userRepository.create({
-      username,
-      email,
-      password,
-      phone_number,
-    });
+    const user = this.userRepository.create(dto);
 
     return await this.userRepository.save(user);
   }

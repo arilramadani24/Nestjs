@@ -13,7 +13,7 @@ import { Category } from 'src/module/category/entity/category.entity';
 
 @Entity({ name: 'products' })
 export class Products {
-  @PrimaryColumn()
+  @PrimaryColumn({ nullable: false })
   id: string;
 
   @Column()
