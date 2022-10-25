@@ -3,7 +3,6 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './../user/dto/create-user.dto';
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   HttpCode,
   Post,
@@ -12,7 +11,6 @@ import {
   UnauthorizedException,
   Req,
   Get,
-  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response, Request } from 'express';
@@ -24,13 +22,6 @@ export class AuthController {
     private readonly jwtService: JwtService,
   ) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Get('users')
-  getAllUser() {
-    return this.userService.findAll();
-  }
-
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get('user')
   async authUser(@Req() req: Request) {
     try {
@@ -48,8 +39,6 @@ export class AuthController {
     }
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
-  @UseInterceptors(ClassSerializerInterceptor)
   @Post('register')
   register(@Body() body: CreateUserDto) {
     return this.authService.register(body);
