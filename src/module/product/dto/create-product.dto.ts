@@ -5,7 +5,7 @@ export class CreateProductDto {
   id: string;
 
   @IsNotEmpty()
-  product_name: string;
+  name: string;
 
   @IsNotEmpty()
   stock: number;

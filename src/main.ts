@@ -23,6 +23,8 @@ async function bootstrap() {
 
   // Use CookieParser
   app.use(cookieParser());
+
+  app.setGlobalPrefix('api')
   
   await app.listen(port);
 }

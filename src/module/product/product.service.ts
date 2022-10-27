@@ -1,8 +1,13 @@
 import { Category } from '../category/entity/category.entity';
 import { Details } from './entity/details.entity';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import {
   CreateProductDetailsDto,
   CreateProductDto,
@@ -27,10 +32,29 @@ export class ProductService {
     return newProduct;
   }
 
-  findAll() {
+  findAllProducts() {
     return this.productRepository.find({
       order: { id: 'ASC' },
       relations: ['details'],
+    });
+  }
+
+  async filterProducts(search: string, price: any) {
+    const products = await this.productRepository.find({
+      relations: ['category', 'details'],
+      where: { name: ILike(`%${search}%`) },
+      order: { price: `${price}` },
+    });
+
+    // Throw an Error if product not founds
+    if (!products.length) throw new NotFoundException('Product Not Found');
+
+    return products;
+  }
+
+  sortProducts(price: any) {
+    return this.productRepository.find({
+      order: { price: `${price}` },
     });
   }
 
@@ -48,7 +72,7 @@ export class ProductService {
 
   async update(id: string, updateProductDto: UpdateProductDto) {
     const product = await this.findOne(id);
-    product.product_name = updateProductDto.product_name;
+    product.name = updateProductDto.product_name;
     product.stock = updateProductDto.stock;
     product.price = updateProductDto.price;
 

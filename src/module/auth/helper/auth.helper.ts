@@ -27,6 +27,7 @@ export class AuthHelper {
       sub: user.id,
       username: user.username,
       email: user.email,
+      phone: user.phone,
     };
 
     const secret = this.config.get('JWT_SECRET');

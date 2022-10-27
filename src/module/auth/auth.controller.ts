@@ -31,7 +31,7 @@ export class AuthController {
 
       if (!data) throw new UnauthorizedException();
 
-      const user = await this.userService.findById(data['id']);
+      const user = await this.userService.findById(data['sub']);
 
       return user;
     } catch (e) {
@@ -72,11 +72,17 @@ export class AuthController {
 
       const user = await this.userService.findById(data['id']);
 
-      const { password, ...result } = user;
-
-      return result;
+      return user;
     } catch (e) {
       throw new UnauthorizedException();
     }
   }
+	@Post('logout')
+    async logout(@Res({passthrough: true}) response: Response) {
+        response.clearCookie('jwt');
+
+        return {
+            message: 'success'
+        }
+    }
 }

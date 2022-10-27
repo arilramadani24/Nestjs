@@ -7,6 +7,8 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  Req,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import {
@@ -14,6 +16,7 @@ import {
   CreateProductDto,
   UpdateProductDto,
 } from './dto';
+import { Request } from 'express';
 
 @Controller('product')
 export class ProductController {
@@ -32,8 +35,16 @@ export class ProductController {
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  async getProducts(@Query('s') search: string, @Query('price') price: any) {
+    if (price) {
+      return await this.productService.sortProducts(price);
+    }
+
+    if (search) {
+      return await this.productService.filterProducts(search, price);
+    }
+
+    return await this.productService.findAllProducts();
   }
 
   @Get(':id')
