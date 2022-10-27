@@ -36,14 +36,9 @@ export class ProductController {
 
   @Get()
   async getProducts(@Query('s') search: string, @Query('price') price: any) {
-    if (price) {
-      return await this.productService.sortProducts(price);
-    }
-
-    if (search) {
+    if (search || price) {
       return await this.productService.filterProducts(search, price);
     }
-
     return await this.productService.findAllProducts();
   }
 

@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from './../../user/user.service';
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import * as emailValidator from 'deep-email-validator';
 
 @Injectable()
 export class AuthHelper {
@@ -20,6 +21,10 @@ export class AuthHelper {
 
   validatePassword(password: string, userPassword: string): boolean {
     return bcrypt.compareSync(password, userPassword);
+  }
+
+  async validateEmail(email: string) {
+    return emailValidator.validate(email);
   }
 
   generateToken(user: User) {
