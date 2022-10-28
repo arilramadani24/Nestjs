@@ -10,7 +10,7 @@ import {
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import { Roles } from './decorator/roles.decorator';
+import { Roles } from '../../custom-decorator/roles.decorator';
 import { Role } from './role.enum';
 
 @Controller('roles')

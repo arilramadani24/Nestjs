@@ -6,7 +6,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -35,14 +34,13 @@ export class AuthService {
     return user;
   }
 
-  async validatePassword(password: string, userPassword: string) {
-    return await bcrypt.compare(password, userPassword);
-  }
-
   async login(email: string, password: string) {
     // Check user in database
     const user = await this.authHelper.getUserByEmail(email);
-    if (!user) throw new NotFoundException('User not found!');
+
+    if (!user) {
+      throw new NotFoundException(`User not found!`);
+    }
 
     const isPasswordValid: boolean = this.authHelper.validatePassword(
       password,
