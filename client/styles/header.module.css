@@ -1,0 +1,19 @@
+.container {
+    height: 120px;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.list-container{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 40px;
+    font-size: larger;
+    justify-items: end;
+}
+.logo{
+    width: 121px;
+    height: 84px;
+}
