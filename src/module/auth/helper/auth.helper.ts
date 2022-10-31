@@ -23,7 +23,7 @@ export class AuthHelper {
     return bcrypt.compareSync(password, userPassword);
   }
 
-  async validateEmail(email: string) {
+  validateEmail(email: string) {
     return emailValidator.validate(email);
   }
 

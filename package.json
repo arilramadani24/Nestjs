@@ -23,6 +23,7 @@
     "migration:generate": "npm run build && npm run typeorm migration:generate -- -n"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
@@ -37,6 +38,7 @@
     "cookie-parser": "^1.4.6",
     "deep-email-validator": "^0.1.21",
     "express-session": "^1.17.3",
+    "nodemailer": "^6.8.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",

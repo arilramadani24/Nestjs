@@ -40,8 +40,8 @@ export class AuthController {
   }
 
   @Post('register')
-  register(@Body() body: CreateUserDto) {
-    return this.authService.register(body);
+  async register(@Body() body: CreateUserDto) {
+    return await this.authService.register(body);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -77,12 +77,12 @@ export class AuthController {
       throw new UnauthorizedException();
     }
   }
-	@Post('logout')
-    async logout(@Res({passthrough: true}) response: Response) {
-        response.clearCookie('jwt');
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('jwt');
 
-        return {
-            message: 'success'
-        }
-    }
+    return {
+      message: 'success',
+    };
+  }
 }

@@ -7,8 +7,8 @@ import { UserModule } from './module/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { Config } from './config/main.config';
 import { AuthModule } from './module/auth/auth.module';
-import { RolesModule } from './module/roles/roles.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { RoleModule } from './module/role/role.module';
 
 @Module({
   imports: [
@@ -21,9 +21,10 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     ProductModule,
     AuthModule,
     UserModule,
-    RolesModule,
+    RoleModule,
   ],
   providers: [
+    // Add Global Interceptors
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,

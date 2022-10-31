@@ -13,12 +13,12 @@ export class AuthService {
 
   async register(dto: CreateUserDto) {
     // Get User's email
-    const { email, phone } = dto;
+    const { email } = dto;
 
     // check email validation
     const { valid } = await this.authHelper.validateEmail(email);
 
-    if (!valid) throw new BadRequestException('Email is not valid');
+    if (valid === false) throw new BadRequestException('Email is not valid');
 
     // check if the user exists in the db
     const userInDb = await this.authHelper.getUserByEmail(email);
